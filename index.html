@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Adivina el numero</title>
+    <style>
+      body {
+        padding-top: 50px;
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        color: #3d3d3d;
+      }
+
+      #result {
+        font-size: 1.2em;
+        margin-top: 20px;
+      }
+
+      #inputIntento {
+        padding: 5px;
+        font-size: 1em;
+      }
+
+      #enviar,
+      #reiniciar {
+        padding: 7px;
+        cursor: pointer;
+      }
+
+      #reiniciar[disabled="true"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Juego adivinar numero</h1>
+    <p>Adivina el numero entre 1 y 100:</p>
+    <p id="numIntentados"></p>
+
+    <input type="number" id="inputIntento" min="1" max="100" />
+    <button id="enviar" onclick="checarNum()">Enviar numero</button>
+    <button id="reiniciar" disabled="true" onclick="reiniciarJuego()">
+      Volver a jugar
+    </button>
+
+    <p id="result"></p>
+
+    <script>
+      function estaCercaDelNum(num, target, range = 10) {
+        return num < target + range && num > target - range;
+      }
+
+      let numSecreto = Math.floor(Math.random() * 100) + 1;
+      let numIntentados = [];
+      let intentos = 0;
+      const maxIntentos = 10;
+
+      const numIntentadosHtml = document.getElementById("numIntentados");
+
+      function reiniciarJuego() {
+        numSecreto = Math.floor(Math.random() * 100) + 1;
+        numIntentados = [];
+        intentos = 0;
+
+        document.getElementById("reiniciar").setAttribute("disabled", "true");
+        document.getElementById("enviar").removeAttribute("disabled");
+        document.getElementById("result").innerText = ``;
+        numIntentadosHtml.innerText = ``;
+      }
+
+      function checarNum() {
+        const guess = parseInt(document.getElementById("inputIntento").value);
+        if (guess < 1 || guess > 100) {
+          document.getElementById("result").innerText =
+            "Numero no valido. Inserta un numero entre 1 y 100.";
+          return;
+        }
+
+        intentos++;
+        numIntentados.push(guess);
+        numIntentadosHtml.innerText = Numeros intentados: ${numIntentados.toString()};
+
+        if (guess === numSecreto) {
+          document.getElementById("result").innerText =
+            "Felicidades! has adivinado el numero.";
+          document.getElementById("enviar").setAttribute("disabled", "true");
+          document.getElementById("reiniciar").removeAttribute("disabled");
+        } else if (intentos === maxIntentos) {
+          document.getElementById("result").innerText =
+            Has perdido, intentalo nuevamente. Numero secreto: ${numSecreto};
+          document.getElementById("enviar").setAttribute("disabled", "true");
+          document.getElementById("reiniciar").removeAttribute("disabled");
+        } else if (estaCercaDelNum(guess, numSecreto, 10)) {
+          document.getElementById(
+            "result"
+          ).innerText = `Estas cerca de adivinar. ${
+            maxIntentos - intentos
+          } intentos restantes.`;
+        } else {
+          document.getElementById(
+            "result"
+          ).innerText = `Te has pasado por mucho, intentalo de nuevo. ${
+            maxIntentos - intentos
+          } intentos restantes.`;
+        }
+      }
+    </script>
+  </body>
+</html>
