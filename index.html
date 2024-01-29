@@ -39,7 +39,7 @@
     <p>Adivina el numero entre 1 y 100:</p>
     <p id="numIntentados"></p>
 
-    <input type="number" id="inputIntento" min="1" max="100" />
+    <input type="number" id="inputIntento" min="1" max="100" defaultValue="1" />
     <button id="enviar" onclick="checarNum()">Enviar numero</button>
     <button id="reiniciar" disabled="true" onclick="reiniciarJuego()">
       Volver a jugar
@@ -72,7 +72,7 @@
 
       function checarNum() {
         const guess = parseInt(document.getElementById("inputIntento").value);
-        if (guess < 1 || guess > 100) {
+        if (guess < 1 || guess > 100 || isNaN(guess)) {
           document.getElementById("result").innerText =
             "Numero no valido. Inserta un numero entre 1 y 100.";
           return;
@@ -80,7 +80,7 @@
 
         intentos++;
         numIntentados.push(guess);
-        numIntentadosHtml.innerText = Numeros intentados: ${numIntentados.toString()};
+        numIntentadosHtml.innerText = `Numeros intentados: ${numIntentados.toString()}`;
 
         if (guess === numSecreto) {
           document.getElementById("result").innerText =
@@ -89,7 +89,7 @@
           document.getElementById("reiniciar").removeAttribute("disabled");
         } else if (intentos === maxIntentos) {
           document.getElementById("result").innerText =
-            Has perdido, intentalo nuevamente. Numero secreto: ${numSecreto};
+            `Has perdido, intentalo nuevamente. Numero secreto: ${numSecreto}`;
           document.getElementById("enviar").setAttribute("disabled", "true");
           document.getElementById("reiniciar").removeAttribute("disabled");
         } else if (estaCercaDelNum(guess, numSecreto, 10)) {
